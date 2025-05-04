@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ room.name }} - Details{% endblock %}
+
+{% block content %}
+    <div class="room-detail">
+        <h1>{{ room.name }}</h1>
+        
+        <div class="room-info">
+            <p><strong>Capacity:</strong> {{ room.capacity }} people</p>
+            <p><strong>Status:</strong> {{ room.status|title }}</p>
+            <p><strong>Features:</strong> {{ room.features }}</p>
+            <p><strong>Description:</strong></p>
+            <p>{{ room.description }}</p>
+        </div>
+
+        {% if user.is_authenticated %}
+            <div class="booking-actions">
+                <a href="{% url 'bookings:create_booking' room.id %}" class="btn">Book This Room</a>
+            </div>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">login</a> to book this room.</p>
+        {% endif %}
+    </div>
+
+    <style>
+        .room-detail {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .room-info {
+            background-color: #f9f9f9;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        .booking-actions {
+            margin-top: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #444;
+        }
+    </style>
+{% endblock %} 

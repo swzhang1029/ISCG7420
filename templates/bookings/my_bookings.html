@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+    <h1>My Bookings</h1>
+    
+    <div class="bookings-list">
+        {% for booking in bookings %}
+            <div class="booking-card">
+                <h2>{{ booking.room.name }}</h2>
+                <p><strong>Date:</strong> {{ booking.start_time|date:"F j, Y" }}</p>
+                <p><strong>Time:</strong> {{ booking.start_time|time:"g:i A" }} - {{ booking.end_time|time:"g:i A" }}</p>
+                <p><strong>Purpose:</strong> {{ booking.purpose }}</p>
+                <p><strong>Status:</strong> {{ booking.status|title }}</p>
+                
+                <div class="booking-actions">
+                    <a href="{% url 'bookings:booking_detail' booking.id %}" class="btn">View Details</a>
+                    {% if booking.status == 'confirmed' and booking.start_time > now %}
+                        <a href="{% url 'bookings:cancel_booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p>You have no bookings.</p>
+        {% endfor %}
+    </div>
+
+    <style>
+        .bookings-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .booking-card {
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .booking-card h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .booking-actions {
+            margin-top: 1rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+        .btn:hover {
+            background-color: #444;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+    </style>
+{% endblock %} 
